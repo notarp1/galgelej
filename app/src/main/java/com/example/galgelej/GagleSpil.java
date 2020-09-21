@@ -76,7 +76,6 @@ public class GagleSpil extends AppCompatActivity {
                         break;
                 }
                 Toast.makeText(GagleSpil.this, toast, Toast.LENGTH_LONG).show();
-
             }
         });
 
