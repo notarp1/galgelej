@@ -1,3 +1,2 @@
-include ':controller'
 include ':app'
 rootProject.name = "Galgelej"

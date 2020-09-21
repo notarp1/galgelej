@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Interne aktiviteter -->
+        <activity android:name=".GagleSpil" android:label="spil"/>
     </application>
 
 </manifest>
