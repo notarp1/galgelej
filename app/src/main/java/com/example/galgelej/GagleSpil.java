@@ -29,7 +29,7 @@ public class GagleSpil extends AppCompatActivity {
     TextView word;
     TextView status;
     TextView guessesWords;
-
+//Aktivitet
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
