@@ -1,6 +1,8 @@
+
 package com.example.galgelej;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,14 +17,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bSpil = findViewById(R.id.startButton);
+        if (savedInstanceState == null) {
+            Fragment fragment = new Menu_Frag();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragmentIndhold, fragment)  // tom container i layout
+                    .commit();
+        }
 
-        bSpil.setOnClickListener(new View.OnClickListener() {
+       /* bSpil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 gotoPlay();
             }
-        });
+        });*/
     }
 
 

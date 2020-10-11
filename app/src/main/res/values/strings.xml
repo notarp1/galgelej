@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Galgelej</string>
     <string name="galgeimage">galgeImage</string>
+    <string name="en_knap">En knap</string>
+    <string name="en_anden_knap">En anden knap</string>
+    <string name="textview">TextView</string>
+    <string name="velkommen">Velkommen!</string>
 </resources>

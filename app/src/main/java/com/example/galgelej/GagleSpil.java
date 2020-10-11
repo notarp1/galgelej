@@ -23,6 +23,7 @@ import Controller.GagleController;
 
 public class GagleSpil extends AppCompatActivity {
 
+    /*
     EditText charInput;
     Button bGuess;
     GagleController spil;
@@ -91,4 +92,6 @@ public class GagleSpil extends AppCompatActivity {
         ((ImageView) findViewById(R.id.imageView)).setImageResource(R.drawable.galge);
         word.setText(spil.getSynligtOrd());
     }
+
+     */
 }
