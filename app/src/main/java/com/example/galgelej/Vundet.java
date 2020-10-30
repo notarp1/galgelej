@@ -7,21 +7,25 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Vundet extends AppCompatActivity implements View.OnClickListener {
-    TextView test;
-    TextView ordView;
+    TextView ordView, highOrd;
     Button nytSpil;
-    String noob;
+
 
     SharedPreferences prefs;
     Set<String> highscore = new HashSet<String>();
-
+    ListView listView;
+    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +37,20 @@ public class Vundet extends AppCompatActivity implements View.OnClickListener {
 
         ordView = findViewById(R.id.textView_ord);
         nytSpil = findViewById(R.id.nytSpil_btn);
-        test = findViewById(R.id.textView);
+        highOrd = findViewById(R.id.text_high);
+        listView = findViewById(R.id.list_highscores);
 
+        highOrd.setText(ord);
         ordView.setText(ord);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        noob = prefs.getString("ord", "null");
 
+
+        highscore = prefs.getStringSet("highscore"+ord, highscore);
+        List<String> list = new ArrayList<String>(highscore);
+
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1, list);
+
+        listView.setAdapter(adapter);
         nytSpil.setOnClickListener(this);
 
 
@@ -46,7 +58,7 @@ public class Vundet extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        test.setText(noob);
+        finish();
 
     }
 }

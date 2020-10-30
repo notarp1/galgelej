@@ -1,6 +1,7 @@
 package com.example.galgelej;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -30,14 +31,14 @@ import Controller.GagleController;
 
 public class GagleSpil extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener{
 
+    GagleController spil;
+    TextView word, status, guessesWords;
     EditText charInput;
     Button bGuess;
-    GagleController spil;
-    TextView word;
-    TextView status;
-    TextView guessesWords;
+    ImageView back;
     SharedPreferences prefs;
     Set<String> highscore;
+
 
 
     @Override
@@ -45,7 +46,7 @@ public class GagleSpil extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spil);
 
-       highscore = new HashSet<String>();
+        highscore = new HashSet<String>();
 
         spil = new GagleController();
 
@@ -54,15 +55,18 @@ public class GagleSpil extends AppCompatActivity implements View.OnClickListener
         word = findViewById(R.id.textWord);
         guessesWords = findViewById(R.id.textGuesses);
         status = findViewById(R.id.textStatus);
+        back = findViewById(R.id.back_img);
 
         spil.nulstil();
         word.setText(spil.getSynligtOrd());
 
-
-
+        back.setOnClickListener(this);
         charInput.setOnEditorActionListener(this);
         bGuess.setOnClickListener(this);
+
+
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
 
         highscore = prefs.getStringSet("highscore"+spil.getOrdet(), highscore);
 
@@ -87,22 +91,29 @@ public class GagleSpil extends AppCompatActivity implements View.OnClickListener
             String toast = "";
             switch (spil.spilStatus()) {
                 case 0:
-                    //prefs.edit().putStringSet();
+                    highscore.add(spil.getTries());
+                    spil.setTries(0);
+                    prefs.edit().putStringSet("highscore"+spil.getOrdet(), highscore).apply();
                     gotoVundet();
                     nulstilSpil();
                     break;
                 case 1:
                     gotoTabt();
+                    spil.setTries(0);
                     nulstilSpil();
                     break;
                 case 2:
                     toast = "Rigtigt Svar!";
+                    Toast.makeText(GagleSpil.this, toast, Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
                     toast = "Forkert svar";
+                    Toast.makeText(GagleSpil.this, toast, Toast.LENGTH_SHORT).show();
                     break;
             }
-            Toast.makeText(GagleSpil.this, toast, Toast.LENGTH_LONG).show();
+
+        } else if (v == back){
+            finish();
         }
     }
 

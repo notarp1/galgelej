@@ -11,10 +11,9 @@ import DAL.GalgeData;
 
 public class GagleController {
 
-    GalgeData spil;
-    int tries = 0;
-
+    GalgeData data = new GalgeData();
     ArrayList<String> muligeOrd = new ArrayList<String>();
+
     private String ordet;
     private ArrayList<String> brugteBogstaver = new ArrayList<String>();
     private String synligtOrd;
@@ -22,11 +21,13 @@ public class GagleController {
     private boolean sidsteBogstavVarKorrekt;
     private boolean spilletErVundet;
     private boolean spilletErTabt;
-    GalgeData data = new GalgeData();
+    int tries = 0;
+    String val;
 
 
     public GagleController(){
         hentPredefineretOrd();
+        nulstil();
     }
 
     public void nulstil(){
@@ -53,6 +54,14 @@ public class GagleController {
         }
     }
 
+    public String getTries(){
+        val = String.valueOf(tries);
+        return val;
+    }
+
+    public void setTries(int tries) {
+        this.tries = tries;
+    }
 
     public String guess(String character, TextView text){
         gaetBogstav(character);
@@ -66,6 +75,7 @@ public class GagleController {
         if(erSidsteBogstavKorrekt()){
             return "Bogstavet var korrekt: '" + character + "'";
         } else {
+            tries += 1;
             return "Bogstavet var forkert: '" + character + "'";
         }
     }
@@ -93,14 +103,6 @@ public class GagleController {
         opdaterSynligtOrd();
     }
 
-    public String getSynligtOrd() {
-        return synligtOrd;
-    }
-
-    public String getOrdet() {
-        return ordet;
-    }
-
     public int getAntalForkerteBogstaver(){
 
         switch (antalForkerteBogstaver){
@@ -122,10 +124,6 @@ public class GagleController {
 
     }
 
-    public boolean erSidsteBogstavKorrekt() {
-        return sidsteBogstavVarKorrekt;
-    }
-
     public int spilStatus(){
         if(erSpilletSlut()){
             if(erSpilletVundet()){
@@ -135,6 +133,22 @@ public class GagleController {
         }else if(erSidsteBogstavKorrekt()) {
             return 2;
         } else return 3;
+    }
+
+    public String getSynligtOrd() {
+        return synligtOrd;
+    }
+
+    public String getOrdet() {
+        return ordet;
+    }
+
+    public ArrayList<String> getBrugteBogstaver() {
+        return brugteBogstaver;
+    }
+
+    public boolean erSidsteBogstavKorrekt() {
+        return sidsteBogstavVarKorrekt;
     }
 
     public boolean erSpilletSlut() {
@@ -147,10 +161,6 @@ public class GagleController {
 
     public boolean erSpilletTabt() {
         return spilletErTabt;
-    }
-
-    public ArrayList<String> getBrugteBogstaver() {
-        return brugteBogstaver;
     }
 
     public void hentPredefineretOrd(){
