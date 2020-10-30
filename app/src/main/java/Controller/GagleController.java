@@ -5,33 +5,57 @@ import android.widget.TextView;
 import com.example.galgelej.R;
 
 import java.util.ArrayList;
+import java.util.Random;
 
-import DAO.Galgelogik;
+import DAL.GalgeData;
 
 public class GagleController {
 
-    Galgelogik spil;
-    private ArrayList<String> brugteBogstaver;
+    GalgeData spil;
     int tries = 0;
 
+    ArrayList<String> muligeOrd = new ArrayList<String>();
+    private String ordet;
+    private ArrayList<String> brugteBogstaver = new ArrayList<String>();
+    private String synligtOrd;
+    private int antalForkerteBogstaver;
+    private boolean sidsteBogstavVarKorrekt;
+    private boolean spilletErVundet;
+    private boolean spilletErTabt;
+    GalgeData data = new GalgeData();
+
+
     public GagleController(){
-        spil = new Galgelogik();
-
-
+        hentPredefineretOrd();
     }
 
     public void nulstil(){
-        spil.nulstil();
+        brugteBogstaver.clear();
+        antalForkerteBogstaver = 0;
+        spilletErVundet = false;
+        spilletErTabt = false;
+        if (muligeOrd.isEmpty()) throw new IllegalStateException("Listen over ord er tom!");
+        ordet = muligeOrd.get(new Random().nextInt(muligeOrd.size()));
+        opdaterSynligtOrd();
     }
 
-    public int triesA(int a){
-
-        tries += a;
-        return tries;
-
+    private void opdaterSynligtOrd() {
+        synligtOrd = "";
+        spilletErVundet = true;
+        for (int n = 0; n < ordet.length(); n++) {
+            String bogstav = ordet.substring(n, n + 1);
+            if (brugteBogstaver.contains(bogstav)) {
+                synligtOrd = synligtOrd + bogstav;
+            } else {
+                synligtOrd = synligtOrd + "*";
+                spilletErVundet = false;
+            }
+        }
     }
+
+
     public String guess(String character, TextView text){
-        spil.gaetBogstav(character);
+        gaetBogstav(character);
         brugteBogstaver = getBrugteBogstaver();
         String usedChars = " ";
         for(int i = 0; i<brugteBogstaver.size(); i++){
@@ -46,12 +70,40 @@ public class GagleController {
         }
     }
 
-    public String getSynligtOrd(){
-        return spil.getSynligtOrd();
+    public void gaetBogstav(String bogstav) {
+        if (bogstav.length() != 1) return;
+        System.out.println("Der gættes på bogstavet: " + bogstav);
+        if (brugteBogstaver.contains(bogstav)) return;
+        if (spilletErVundet || spilletErTabt) return;
+
+        brugteBogstaver.add(bogstav);
+
+        if (ordet.contains(bogstav)) {
+            sidsteBogstavVarKorrekt = true;
+            System.out.println("Bogstavet var korrekt: " + bogstav);
+        } else {
+            // Vi gættede på et bogstav der ikke var i ordet.
+            sidsteBogstavVarKorrekt = false;
+            System.out.println("Bogstavet var IKKE korrekt: " + bogstav);
+            antalForkerteBogstaver = antalForkerteBogstaver + 1;
+            if (antalForkerteBogstaver > 5) {
+                spilletErTabt = true;
+            }
+        }
+        opdaterSynligtOrd();
     }
+
+    public String getSynligtOrd() {
+        return synligtOrd;
+    }
+
+    public String getOrdet() {
+        return ordet;
+    }
+
     public int getAntalForkerteBogstaver(){
 
-        switch (spil.getAntalForkerteBogstaver()){
+        switch (antalForkerteBogstaver){
             case 1:
                 return R.drawable.forkert1;
             case 2:
@@ -70,8 +122,8 @@ public class GagleController {
 
     }
 
-    public boolean erSidsteBogstavKorrekt(){
-        return spil.erSidsteBogstavKorrekt();
+    public boolean erSidsteBogstavKorrekt() {
+        return sidsteBogstavVarKorrekt;
     }
 
     public int spilStatus(){
@@ -85,24 +137,45 @@ public class GagleController {
         } else return 3;
     }
 
-    public boolean erSpilletSlut(){
-        return spil.erSpilletSlut();
+    public boolean erSpilletSlut() {
+        return spilletErTabt || spilletErVundet;
     }
 
     public boolean erSpilletVundet() {
-        return spil.erSpilletVundet();
+        return spilletErVundet;
     }
 
     public boolean erSpilletTabt() {
-        return spil.erSpilletTabt();
+        return spilletErTabt;
     }
 
     public ArrayList<String> getBrugteBogstaver() {
-        return spil.getBrugteBogstaver();
+        return brugteBogstaver;
     }
 
-    public String getOrdet(){
-        return spil.getOrdet();
+    public void hentPredefineretOrd(){
+    muligeOrd.add("bil");
+    muligeOrd.add("computer");
+    muligeOrd.add("programmering");
+    muligeOrd.add("motorvej");
+    muligeOrd.add("busrute");
+    muligeOrd.add("gangsti");
+    muligeOrd.add("skovsnegl");
+    muligeOrd.add("solsort");
+    muligeOrd.add("nitten");
     }
+
+    public void hentOrdFraDr() throws Exception {
+
+        muligeOrd = data.hentOrdFraDr();
+        nulstil();
+    }
+
+    public void  hentOrdFraRegneark(String difficulty) throws Exception {
+        muligeOrd = data.hentOrdFraRegneark(difficulty);
+        nulstil();
+
+    }
+
 
 }
