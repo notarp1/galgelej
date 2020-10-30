@@ -6,15 +6,17 @@ import com.example.galgelej.R;
 
 import java.util.ArrayList;
 
-import DTO.Galgelogik;
+import DAO.Galgelogik;
 
 public class GagleController {
 
     Galgelogik spil;
     private ArrayList<String> brugteBogstaver;
+    int tries = 0;
 
     public GagleController(){
         spil = new Galgelogik();
+
 
     }
 
@@ -22,6 +24,12 @@ public class GagleController {
         spil.nulstil();
     }
 
+    public int triesA(int a){
+
+        tries += a;
+        return tries;
+
+    }
     public String guess(String character, TextView text){
         spil.gaetBogstav(character);
         brugteBogstaver = getBrugteBogstaver();

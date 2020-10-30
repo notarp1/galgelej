@@ -1,13 +1,18 @@
 package com.example.galgelej;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,10 +23,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import Controller.GagleController;
 
-public class GagleSpil extends AppCompatActivity {
+public class GagleSpil extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener{
 
     EditText charInput;
     Button bGuess;
@@ -29,11 +36,16 @@ public class GagleSpil extends AppCompatActivity {
     TextView word;
     TextView status;
     TextView guessesWords;
-//Aktivitet
+    SharedPreferences prefs;
+    Set<String> highscore;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spil);
+
+       highscore = new HashSet<String>();
 
         spil = new GagleController();
 
@@ -45,43 +57,53 @@ public class GagleSpil extends AppCompatActivity {
 
         spil.nulstil();
         word.setText(spil.getSynligtOrd());
-        status.setText("Indtast dit første bogstav");
 
-        bGuess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                String input = charInput.getText().toString();
-                status.setText(spil.guess(input, guessesWords));
-                word.setText(spil.getSynligtOrd());
 
-                int wrongAnswer = spil.getAntalForkerteBogstaver();
-                ((ImageView)findViewById(R.id.imageView)).setImageResource(wrongAnswer);
+        charInput.setOnEditorActionListener(this);
+        bGuess.setOnClickListener(this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-                String toast = "";
-                switch (spil.spilStatus()){
-                    case 0:
-                        toast = "Tilykke du har vundet";
-                        nulstilSpil();
-                        break;
-                    case 1:
-                        toast = "Du har tabt. Ordet var: " + spil.getOrdet();
-                        nulstilSpil();
-                        break;
-                    case 2:
-                        toast = "Rigtigt Svar!";
-                        break;
-                    case 3:
-                        toast = "Forkert svar";
-                        break;
-                }
-                Toast.makeText(GagleSpil.this, toast, Toast.LENGTH_LONG).show();
+        highscore = prefs.getStringSet("highscore"+spil.getOrdet(), highscore);
+
+
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (v == bGuess) {
+            String input = charInput.getText().toString();
+            charInput.setText(null);
+
+            status.setText(spil.guess(input, guessesWords));
+            word.setText(spil.getSynligtOrd());
+
+            int wrongAnswer = spil.getAntalForkerteBogstaver();
+            ((ImageView) findViewById(R.id.imageView)).setImageResource(wrongAnswer);
+
+            String toast = "";
+            switch (spil.spilStatus()) {
+                case 0:
+                    //prefs.edit().putStringSet();
+                    gotoVundet();
+                    nulstilSpil();
+                    break;
+                case 1:
+                    gotoTabt();
+                    nulstilSpil();
+                    break;
+                case 2:
+                    toast = "Rigtigt Svar!";
+                    break;
+                case 3:
+                    toast = "Forkert svar";
+                    break;
             }
-        });
-
-
-
-
+            Toast.makeText(GagleSpil.this, toast, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void nulstilSpil() {
@@ -90,5 +112,29 @@ public class GagleSpil extends AppCompatActivity {
         status.setText("Indtast dit første bogstav");
         ((ImageView) findViewById(R.id.imageView)).setImageResource(R.drawable.galge);
         word.setText(spil.getSynligtOrd());
+    }
+
+    private void gotoVundet(){
+        Intent i = new Intent(this, Vundet.class);
+        i.putExtra("ord", spil.getOrdet());
+        startActivity(i);
+    }
+
+    private void gotoTabt(){
+        Intent i = new Intent(this, Tabt.class);
+        i.putExtra("ord", spil.getOrdet());
+        startActivity(i);
+    }
+
+
+
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+
+            bGuess.performClick();
+        }
+        return false;
     }
 }
