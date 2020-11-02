@@ -1,12 +1,14 @@
 package com.example.galgelej;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,19 +25,20 @@ import Controller.GagleController;
 
 public class GagleSpil extends AppCompatActivity {
 
-    /*
     EditText charInput;
     Button bGuess;
     GagleController spil;
     TextView word;
     TextView status;
     TextView guessesWords;
-//Aktivitet
+
+    SharedPreferences prefs;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spil);
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         spil = new GagleController();
 
         charInput = findViewById(R.id.inputString);
@@ -92,6 +95,4 @@ public class GagleSpil extends AppCompatActivity {
         ((ImageView) findViewById(R.id.imageView)).setImageResource(R.drawable.galge);
         word.setText(spil.getSynligtOrd());
     }
-
-     */
 }

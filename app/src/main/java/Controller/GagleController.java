@@ -1,5 +1,7 @@
 package Controller;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.TextView;
 
 import com.example.galgelej.R;
@@ -10,7 +12,11 @@ import DTO.Galgelogik;
 
 public class GagleController {
 
+
     Galgelogik spil;
+
+
+
     private ArrayList<String> brugteBogstaver;
 
     public GagleController(){
@@ -20,6 +26,7 @@ public class GagleController {
 
     public void nulstil(){
         spil.nulstil();
+
     }
 
     public String guess(String character, TextView text){
@@ -94,6 +101,7 @@ public class GagleController {
     }
 
     public String getOrdet(){
+
         return spil.getOrdet();
     }
 
