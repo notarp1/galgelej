@@ -66,8 +66,6 @@ public class GagleSpil extends AppCompatActivity implements View.OnClickListener
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-
         highscore = prefs.getStringSet("highscore"+spil.getOrdet(), highscore);
 
 

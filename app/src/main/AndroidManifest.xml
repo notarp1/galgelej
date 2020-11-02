@@ -14,7 +14,9 @@
         <activity android:name=".Indstillinger"></activity>
         <activity android:name=".Tabt" />
         <activity android:name=".Vundet" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

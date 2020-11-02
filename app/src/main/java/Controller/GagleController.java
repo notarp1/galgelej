@@ -1,5 +1,6 @@
 package Controller;
 
+import android.os.SystemClock;
 import android.widget.TextView;
 
 import com.example.galgelej.R;
@@ -26,7 +27,18 @@ public class GagleController {
 
 
     public GagleController(){
-        hentPredefineretOrd();
+
+       // hentPredefineretOrd();
+        try {
+            hentOrdFraDr();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        while (muligeOrd.isEmpty()){
+            SystemClock.sleep(1);
+        }
+
         nulstil();
     }
 
@@ -177,14 +189,30 @@ public class GagleController {
 
     public void hentOrdFraDr() throws Exception {
 
-        muligeOrd = data.hentOrdFraDr();
-        nulstil();
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    muligeOrd = data.hentOrdFraDr();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(r).start();
     }
 
-    public void  hentOrdFraRegneark(String difficulty) throws Exception {
-        muligeOrd = data.hentOrdFraRegneark(difficulty);
-        nulstil();
+    public void  hentOrdFraRegneark(final String difficulty) {
 
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    muligeOrd = data.hentOrdFraRegneark(difficulty);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(r).start();
     }
 
 
