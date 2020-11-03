@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class GalgeData {
+public class GalgeData implements  IGalgeData{
   /** AHT afprøvning er muligeOrd synlig på pakkeniveau */
   ArrayList<String> muligeOrd = new ArrayList<String>();
 
@@ -16,7 +16,7 @@ public class GalgeData {
   public GalgeData() {}
 
 
-  public static String hentUrl(String url) throws IOException {
+  public String hentUrl(String url) throws IOException {
     System.out.println("Henter data fra " + url);
     BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
     StringBuilder sb = new StringBuilder();
@@ -69,14 +69,14 @@ public class GalgeData {
   public ArrayList<String> hentOrdFraRegneark(String svaerhedsgrader) throws Exception {
     String id = "1RnwU9KATJB94Rhr7nurvjxfg09wAHMZPYB3uySBPO6M";
 
-    System.out.println("Henter data som kommasepareret CSV fra regnearket https://docs.google.com/spreadsheets/d/"+id+"/edit?usp=sharing");
+    // System.out.println("Henter data som kommasepareret CSV fra regnearket https://docs.google.com/spreadsheets/d/"+id+"/edit?usp=sharing");
 
     String data = hentUrl("https://docs.google.com/spreadsheets/d/" + id + "/export?format=csv&id=" + id);
     int linjeNr = 0;
 
     muligeOrd.clear();
     for (String linje : data.split("\n")) {
-      if (linjeNr<20) System.out.println("Læst linje = " + linje); // udskriv de første 20 linjer
+      //if (linjeNr<20) System.out.println("Læst linje = " + linje); // udskriv de første 20 linjer
       if (linjeNr++ < 1 ) continue; // Spring første linje med kolonnenavnene over
       String[] felter = linje.split(",", -1);// -1 er for at beholde tomme indgange, f.eks. bliver ",,," splittet i et array med 4 tomme strenge
       String svaerhedsgrad = felter[0].trim();
@@ -88,6 +88,21 @@ public class GalgeData {
     }
 
     System.out.println("muligeOrd = " + muligeOrd);
+    return muligeOrd;
+  }
+
+  public ArrayList<String> hentPredefineretOrd(){
+
+    muligeOrd.add("bil");
+    muligeOrd.add("computer");
+    muligeOrd.add("programmering");
+    muligeOrd.add("motorvej");
+    muligeOrd.add("busrute");
+    muligeOrd.add("gangsti");
+    muligeOrd.add("skovsnegl");
+    muligeOrd.add("solsort");
+    muligeOrd.add("nitten");
+    System.out.println("hej");
     return muligeOrd;
   }
 }

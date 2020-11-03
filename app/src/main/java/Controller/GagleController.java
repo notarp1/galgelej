@@ -10,37 +10,100 @@ import java.util.Random;
 
 import DAL.GalgeData;
 
-public class GagleController {
+public class GagleController implements IGalgeController{
 
-    GalgeData data = new GalgeData();
-    ArrayList<String> muligeOrd = new ArrayList<String>();
-
-    private String ordet;
+    private  ArrayList<String> muligeOrd;
+    private String ordet, synligtOrd;
     private ArrayList<String> brugteBogstaver = new ArrayList<String>();
-    private String synligtOrd;
     private int antalForkerteBogstaver;
-    private boolean sidsteBogstavVarKorrekt;
-    private boolean spilletErVundet;
-    private boolean spilletErTabt;
+    private boolean sidsteBogstavVarKorrekt, spilletErVundet, spilletErTabt;
+
     int tries = 0;
     String val;
 
 
-    public GagleController(){
 
-       // hentPredefineretOrd();
-        try {
-            hentOrdFraDr();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        while (muligeOrd.isEmpty()){
-            SystemClock.sleep(1);
-        }
+    private GagleController(GagleControllerBuilder builder){
+
+        this.muligeOrd = builder.muligeOrd;
+
+        while (muligeOrd.isEmpty()) SystemClock.sleep(1);
 
         nulstil();
+
     }
+
+
+
+
+
+    public static class GagleControllerBuilder {
+
+        GalgeData data = new GalgeData();;
+
+        private ArrayList<String> muligeOrd = new ArrayList<>();
+
+
+        public GagleControllerBuilder(){
+            if(!muligeOrd.isEmpty()){
+                muligeOrd = new ArrayList<>();
+            }
+        }
+
+        public GagleControllerBuilder reset(){
+            muligeOrd = new ArrayList<>();
+            return this;
+        }
+
+        public GagleControllerBuilder HentOrdPredifineret(){
+
+         muligeOrd = data.hentPredefineretOrd();
+         return this;
+
+        }
+
+        public GagleControllerBuilder HentOrdFraDr(){
+
+            Runnable r = new Runnable() {
+                public void run() {
+                    try {
+                        muligeOrd = data.hentOrdFraDr();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            new Thread(r).start();
+            while (muligeOrd.isEmpty())SystemClock.sleep(1);
+
+            return this;
+        }
+
+        public GagleControllerBuilder HentOrdRegneark(final String difficulty){
+            Runnable r = new Runnable() {
+                public void run() {
+                    try {
+                        muligeOrd = data.hentOrdFraRegneark(difficulty);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            new Thread(r).start();
+
+            while (muligeOrd.isEmpty())SystemClock.sleep(1);
+            return this;
+        }
+
+        public  GagleController build(){
+            GagleController  galgeControler = new GagleController(this);
+            return galgeControler;
+        }
+
+    }
+
+
 
     public void nulstil(){
         brugteBogstaver.clear();
@@ -52,7 +115,7 @@ public class GagleController {
         opdaterSynligtOrd();
     }
 
-    private void opdaterSynligtOrd() {
+    public void opdaterSynligtOrd() {
         synligtOrd = "";
         spilletErVundet = true;
         for (int n = 0; n < ordet.length(); n++) {
@@ -175,45 +238,8 @@ public class GagleController {
         return spilletErTabt;
     }
 
-    public void hentPredefineretOrd(){
-    muligeOrd.add("bil");
-    muligeOrd.add("computer");
-    muligeOrd.add("programmering");
-    muligeOrd.add("motorvej");
-    muligeOrd.add("busrute");
-    muligeOrd.add("gangsti");
-    muligeOrd.add("skovsnegl");
-    muligeOrd.add("solsort");
-    muligeOrd.add("nitten");
-    }
 
-    public void hentOrdFraDr() throws Exception {
 
-        Runnable r = new Runnable() {
-            public void run() {
-                try {
-                    muligeOrd = data.hentOrdFraDr();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        new Thread(r).start();
-    }
-
-    public void  hentOrdFraRegneark(final String difficulty) {
-
-        Runnable r = new Runnable() {
-            public void run() {
-                try {
-                    muligeOrd = data.hentOrdFraRegneark(difficulty);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        new Thread(r).start();
-    }
 
 
 }

@@ -28,27 +28,47 @@ import java.util.HashSet;
 import java.util.Set;
 
 import Controller.GagleController;
+import DAL.GalgeData;
 
 public class GagleSpil extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener{
 
-    GagleController spil;
+
     TextView word, status, guessesWords;
     EditText charInput;
     Button bGuess;
     ImageView back;
     SharedPreferences prefs;
     Set<String> highscore;
-
+    GagleController spil;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spil);
+        Intent i = getIntent();
+
+        String ord = i.getStringExtra("selection");
+        System.out.println(ord);
+        int selection = Integer.parseInt(ord);
+
+
+
+        switch (selection){
+            case 1:
+                spil = new GagleController.GagleControllerBuilder().HentOrdPredifineret().build();
+                break;
+            case 2:
+                spil = new GagleController.GagleControllerBuilder().HentOrdFraDr().build();
+                break;
+            case 3:
+                String difficulty = i.getStringExtra("diff");
+                spil = new GagleController.GagleControllerBuilder().HentOrdRegneark(difficulty).build();
+                break;
+        }
 
         highscore = new HashSet<String>();
 
-        spil = new GagleController();
 
         charInput = findViewById(R.id.inputString);
         bGuess = findViewById(R.id.buttonGuess);
