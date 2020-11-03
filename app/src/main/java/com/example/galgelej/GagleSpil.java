@@ -1,14 +1,7 @@
 package com.example.galgelej;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
@@ -23,12 +16,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
 import Controller.GagleController;
-import DAL.GalgeData;
 
 public class GagleSpil extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener{
 

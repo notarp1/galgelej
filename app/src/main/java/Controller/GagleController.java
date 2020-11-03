@@ -8,7 +8,7 @@ import com.example.galgelej.R;
 import java.util.ArrayList;
 import java.util.Random;
 
-import DAL.GalgeData;
+import DAL.GalgeDataALL;
 
 public class GagleController implements IGalgeController{
 
@@ -40,7 +40,7 @@ public class GagleController implements IGalgeController{
 
     public static class GagleControllerBuilder {
 
-        GalgeData data = new GalgeData();;
+        GalgeDataALL data = new GalgeDataALL();;
 
         private ArrayList<String> muligeOrd = new ArrayList<>();
 

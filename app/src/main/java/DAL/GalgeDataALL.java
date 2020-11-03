@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class GalgeData implements  IGalgeData{
+import DAL.Interfaces.IGalgeDataALL;
+
+public class GalgeDataALL implements IGalgeDataALL {
   /** AHT afprøvning er muligeOrd synlig på pakkeniveau */
   ArrayList<String> muligeOrd = new ArrayList<String>();
 
 
-  public GalgeData() {}
+  public GalgeDataALL() {}
 
 
   public String hentUrl(String url) throws IOException {
