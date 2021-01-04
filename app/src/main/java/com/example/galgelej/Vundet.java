@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -26,6 +27,9 @@ public class Vundet extends AppCompatActivity implements View.OnClickListener {
     Set<String> highscore = new HashSet<String>();
     ListView listView;
     ArrayAdapter adapter;
+    MediaPlayer mp;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,11 @@ public class Vundet extends AppCompatActivity implements View.OnClickListener {
 
         Intent i = getIntent();
         String ord = i.getStringExtra("ord");
+
+        mp=MediaPlayer.create(this,R.raw.win);
+        mp.start();
+
+
 
         ordView = findViewById(R.id.textView_ord);
         nytSpil = findViewById(R.id.nytSpil_btn);

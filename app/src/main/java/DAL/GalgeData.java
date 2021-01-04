@@ -10,12 +10,12 @@ import java.util.HashSet;
 
 import DAL.Interfaces.IGalgeDataALL;
 
-public class GalgeDataALL implements IGalgeDataALL {
+public class GalgeData implements IGalgeDataALL {
   /** AHT afprøvning er muligeOrd synlig på pakkeniveau */
   ArrayList<String> muligeOrd = new ArrayList<String>();
 
 
-  public GalgeDataALL() {}
+  public GalgeData() {}
 
 
   public String hentUrl(String url) throws IOException {

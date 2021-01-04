@@ -7,9 +7,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class Ordvalg extends AppCompatActivity implements View.OnClickListener {
@@ -18,6 +21,7 @@ public class Ordvalg extends AppCompatActivity implements View.OnClickListener {
     EditText diff;
     String input;
     ImageView back;
+    Spinner dropDown;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,27 +30,51 @@ public class Ordvalg extends AppCompatActivity implements View.OnClickListener {
         pre = findViewById(R.id.button_pre);
         ark = findViewById(R.id.button_ark);
         dr = findViewById(R.id.button_dr);
-        diff = findViewById(R.id.edit_diff);
-        back = findViewById(R.id.back_img2);
+        dropDown = findViewById(R.id.edit_diff);
+        back = findViewById(R.id.back_img22);
 
+
+        ArrayAdapter<CharSequence> dropDownAdapter = ArrayAdapter.createFromResource(this, R.array.createDropDown, R.layout.support_simple_spinner_dropdown_item);
+        dropDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropDown.setAdapter(dropDownAdapter);
+        dropDown.setPrompt("Vælg sværhedsgrad");
 
         back.setOnClickListener(this);
         pre.setOnClickListener(this);
         ark.setOnClickListener(this);
         dr.setOnClickListener(this);
+
+
+        dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // An item was selected. You can retrieve the selected item using
+                System.out.println(parent.getItemAtPosition(position));
+                //set the newly selected type to local string
+                input = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
-        Intent gaglespil = new Intent(this, GagleSpil.class);
+
         boolean range = true;
-
-
-
-
         if(v == back){
             finish();
-        } else if(v == pre){
+            range = false;
+        }
+
+        Intent gaglespil = new Intent(this, GagleSpil.class);
+
+
+        if(v == pre){
             gaglespil.putExtra("selection", "1");
 
         }else if (v == dr){
@@ -55,20 +83,11 @@ public class Ordvalg extends AppCompatActivity implements View.OnClickListener {
                 Toast.makeText(Ordvalg.this, "Du er ikke forbundet til internettet!", Toast.LENGTH_SHORT).show();
                 range = false;
             }
+
         }else if (v == ark){ //Google Ark
-            int i = 5;
-            input = diff.getText().toString();
+            gaglespil.putExtra("selection", "3");
 
-            try {
-                i = Integer.parseInt(input);
-                if(i<1 || i>4){
-                    range = false;
-                    Toast.makeText(Ordvalg.this, "Sværhedsgrad går kun fra 1-4!", Toast.LENGTH_SHORT).show(); }
-                gaglespil.putExtra("selection", "3");
-
-            }catch (NumberFormatException e){
-                range = false;
-            }if(isOnline()){
+            if(isOnline()){
                 Toast.makeText(Ordvalg.this, "Du er ikke forbundet til internettet!", Toast.LENGTH_SHORT).show();
                 range = false;
             }
